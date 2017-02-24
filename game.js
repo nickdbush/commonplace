@@ -11,9 +11,18 @@ module.exports = class Game {
     this.words = words.map((v, index) => {return {word: v, guessed: false, points: (increment || true) ? words.length - index : index + 1}});
     this.state = {
       active: false,
-      scores: {},
+      teams: [],
       guessedWords: 0
     };
+  }
+
+  addPlayerToTeam(player, team) {
+    let teamIndex = _.findIndex(this.state.teams, ['name', team]);
+    if(teamIndex === -1) {
+      this.state.teams.push({name: team, members: [player], score: 0});
+      return;
+    }
+    this.state.teams[teamIndex].members.push(player);
   }
 
   guess(word, player) {
@@ -28,13 +37,44 @@ module.exports = class Game {
     this.state.guessedWords ++;
     let points = this.words[index].points;
     
-    if(!this.state.scores[player]) this.state.scores[player] = 0;
-    this.state.scores[player] += points;
+    // FIND TEAM PLAYER IS IN, ADD SCORES
+    let teamIndex = _.findIndex(this.state.teams, team => _.includes(team.members, player));
+    if(teamIndex === -1) {
+      return points;
+    }
 
+    this.state.teams[teamIndex].score += points;
     return points;
   }
 
-  getScore(player) {
-    return this.state.scores[player] || 0;
+  getScoreForTeam(team) {
+    let teamIndex = _.findIndex(this.state.teams, ['name', team]);
+    if(teamIndex === -1) {
+      return 0;
+    } else {
+      return this.state.teams[teamIndex].score;
+    }
+  }
+  
+  getScoreForPlayer(player) {
+    let teamIndex = _.findIndex(this.state.teams, team => _.includes(team.members, player));
+    if(teamIndex === -1) {
+      return 0;
+    } else {
+      return this.state.teams[teamIndex].score;
+    }
+  }
+  
+  getTeamNameOfPlayer(player) {
+    let teamIndex = _.findIndex(this.state.teams, team => _.includes(team.members, player));
+    if(teamIndex === -1) {
+      return null;
+    } else {
+      return this.state.teams[teamIndex].name;
+    }
+  } 
+  
+  getScores() {
+    return _.map(this.state.teams, team => ({name: team.name, score: team.score}));
   }
 };

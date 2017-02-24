@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Commonplace</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="/board.css" type="text/css" />
+</head>
+
+<body id="board" v-cloak>
+  <header v-on:click="toggleState">
+    Game {{open ? 'open' : 'closed'}}
+  </header>
+  <main>
+    <div class="team" v-for="team in teams" v-bind:style="{backgroundColor: team.name}">
+      {{team.score}}
+    </div>
+  </main>
+  <script src="https://unpkg.com/vue@1.0.26/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios@0.14.0/dist/axios.min.js"></script>
+  <script type="text/javascript" src="/faye/client.js"></script>
+  <script src="/board.js"></script>
+</body>
+
+</html>
