@@ -13,7 +13,7 @@
   <header><span class="push-right">{{round_name}}</span><span class="score" v-bind:style="{backgroundColor: team}">{{score}}</span></header>
   <main>
     <form v-on:submit="submit">
-      <input type="text" id="input" v-model="guess" v-bind:disabled="!open" autofocus="true">
+      <input type="text" id="input" v-model="guess" v-bind:disabled="!open" autofocus="true" autocomplete="off">
     </form>
     <div v-show="last_guess && message" id="info">
       <strong>"{{last_guess}}"</strong>{{message}}
